@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<!-- https://wiki.selfhtml.org/wiki/JavaScript/Tutorials/Tabellen_dynamisch_sortieren#Zugriff_auf_die_Tabellenelemente -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="./Beispiel:SELFHTML-Beispiel-Grundlayout.css" />
+<title>Beispiel: Tabellensortierter</title>
+<style>
+table {
+	border: 1px solid black;
+	border-spacing: 0px;
+	border-collapse: collapse
+}
+
+table td {
+	border: 1px solid black;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	padding: 3px
+}
+
+table th {
+	border: 1px solid black;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	padding: 3px
+}
+
+table h2 {
+	margin: 0
+}
+
+table caption {
+	padding: 0.5em;
+	text-align: left;
+	font-weight: bold;
+}
+
+table.is_sortable thead th {
+	background-color: lightgray;
+}
+</style>
+<script>
+	(function() {
+
+		"use strict";
+
+		var tableSort = function(tab) {
+			// Dokumentensprache ermitteln
+			var doclang = document.documentElement.hasAttribute("lang") ? document.documentElement
+					.getAttribute("lang")
+					: "de";
+
+			// Tabellenelemente ermitteln
+			var thead = tab.tHead;
+			if (thead)
+				var tr_in_thead = thead.rows;
+			if (tr_in_thead)
+				var tabletitel = tr_in_thead[0].cells;
+			if (!(tabletitel && tabletitel.length > 0)) {
+				console.error("Tabelle hat keinen thead und/oder keine THs.");
+				return;
+			}
+			var tbdy = tab.tBodies;
+			if (!(tbdy)) {
+				console.error("Tabelle hat keinen tbody.");
+				return;
+			}
+			tbdy = tbdy[0];
+			var tr = tbdy.rows;
+			if (!(tr && tr.length > 0)) {
+				console.error("Tabelle hat keine Zeilen im tbody.");
+				return;
+			}
+			var nrows = tr.length;
+			var ncols = tr[0].cells.length;
+
+			// Einige Variablen
+			var arr = [];
+			var sorted = -1;
+			var sortbuttons = [];
+			var sorttype = [];
+
+			// Stylesheets für Button im TH
+			var sortbuttonStyle = document.createElement('style');
+			var stylestring = '.sortbutton { width:100%; height:100%; border: none; background-color: transparent; font: inherit; color: inherit; text-align: inherit; padding: 0; cursor: pointer; } ';
+			stylestring += '.sortierbar thead th span.visually-hidden { position: absolute !important; clip: rect(1px, 1px, 1px, 1px) !important; padding: 0 !important; border: 0 !important; height: 1px !important; width: 1px !important; overflow: hidden !important; white-space: nowrap !important; } ';
+			stylestring += '.sortbutton::after { display: inline-block; letter-spacing: -.2em; margin-left:.1em; width: 1.8em; } ';
+			stylestring += '.sortbutton.sortedasc::after { content: "▲▽" } ';
+			stylestring += '.sortbutton.sorteddesc::after { content: "△▼" } ';
+			stylestring += '.sortbutton.unsorted::after { content: "△▽" } ';
+			stylestring += '.sortierbar caption span{ font-weight: normal; font-size: .8em; } ';
+			sortbuttonStyle.innerText = stylestring;
+			document.head.appendChild(sortbuttonStyle);
+
+			var initTableHead = function(sp) { // Kopfzeile vorbereiten
+				var hinweis = doclang == "de" ? 'Sortiere nach ' : 'Sort by ';
+				var b = document.createElement("button");
+				b.type = "button";
+				b.className = "sortbutton unsorted";
+				b.addEventListener("click", function() {
+					tsort(sp);
+				}, false);
+				b.innerHTML = "<span class='visually-hidden'>" + hinweis
+						+ "</span>" + tabletitel[sp].innerHTML;
+				b.title = b.textContent;
+				tabletitel[sp].innerHTML = "<span class='visually-hidden'>"
+						+ tabletitel[sp].innerHTML + "</span>";
+				tabletitel[sp].appendChild(b);
+				sortbuttons[sp] = b;
+			} // initTableHead
+
+			var getData = function(ele, col) {
+				var val = ele.textContent;
+				// Tausendertrenner entfernen, und , durch . ersetzen
+				var tval = val
+						.replace(
+								/\s|&nbsp;|&#160;|\u00A0|&#8239;|\u202f|&thinsp;|&#8201;|\u2009/g,
+								"").replace(",", ".");
+				if (!isNaN(tval) && tval.search(/[0-9]/) != -1)
+					return tval; // Zahl
+				sorttype[col] = "s"; // String
+				return val;
+			} // getData		
+
+			var vglFkt_s = function(a, b) {
+				return a[sorted].localeCompare(b[sorted], doclang);
+			} // vglFkt_s
+
+			var vglFkt_n = function(a, b) {
+				return a[sorted] - b[sorted];
+			} // vglFkt_n
+
+			var tsort = function(sp) { // Der Sortierer
+				if (sp == sorted) { // Tabelle ist schon nach dieser Spalte sortiert, also nur Reihenfolge umdrehen
+					arr.reverse();
+					sortbuttons[sp].classList.toggle("sortedasc");
+					sortbuttons[sp].classList.toggle("sorteddesc");
+				} else { // Sortieren 
+					if (sorted > -1) {
+						sortbuttons[sorted].classList.remove("sortedasc");
+						sortbuttons[sorted].classList.remove("sorteddesc");
+						sortbuttons[sorted].classList.add("unsorted");
+						sortbuttons[sorted].removeAttribute("aria-current");
+					}
+					sortbuttons[sp].classList.remove("unsorted");
+					sortbuttons[sp].classList.add("sortedasc");
+					sortbuttons[sp].setAttribute("aria-current", "true");
+					sorted = sp;
+					if (sorttype[sp] == "n")
+						arr.sort(vglFkt_n);
+					else
+						arr.sort(vglFkt_s);
+				}
+				for (var r = 0; r < nrows; r++)
+					tbdy.appendChild(arr[r][ncols]); // Sortierte Daten zurückschreiben
+			} // tsort
+
+			// Kopfzeile vorbereiten
+			for (var i = 0; i < tabletitel.length; i++)
+				initTableHead(i);
+
+			// Array mit Info, wie Spalte zu sortieren ist, vorbelegen
+			for (var c = 0; c < ncols; c++)
+				sorttype[c] = "n";
+
+			// Tabelleninhalt in ein Array kopieren
+			for (var r = 0; r < nrows; r++) {
+				arr[r] = [];
+				for (var c = 0; c < ncols; c++) {
+					var cc = getData(tr[r].cells[c], c);
+					arr[r][c] = cc;
+					// tr[r].cells[c].innerHTML += "<br>"+cc+"<br>"+sorttype[c]; // zum Debuggen
+				}
+				arr[r][ncols] = tr[r];
+			}
+
+			// Tabelle die Klasse "is_sortable" geben
+			tab.classList.add("is_sortable");
+
+			// An caption Hinweis anhängen
+			var caption = tab.caption;
+			if (caption)
+				caption.innerHTML += doclang == "de" ? "<br><span>Ein Klick auf die Spaltenüberschrift sortiert die Tabelle.</span>"
+						: "<br><span>A click on the column header sorts the table.</span>"
+
+		} // tableSort
+
+		// Alle Tabellen suchen, die sortiert werden sollen, und den Tabellensortierer starten.
+		var initTableSort = function() {
+			var sort_Table = document.querySelectorAll("table.sortierbar");
+			for (var i = 0; i < sort_Table.length; i++)
+				new tableSort(sort_Table[i]);
+		} // initTable
+
+		if (window.addEventListener)
+			window.addEventListener("DOMContentLoaded", initTableSort, false); // nicht im IE8
+
+	})();
+</script>
+
+</head>
+
+<!-- schmales umbruchgeschütztes Leerzeichen 	U+202F 	8239 	NARROW NO-BREAK SPACE 	&#8239; 	&#x202f;  -->
+
+<body>
+
+	<h1>Beispiel: Tabellensortierer</h1>
+	<main>
+
+	<table class="sortierbar">
+		<caption>Im SI definierte Dezimalpräfixe</caption>
+		<thead>
+			<tr>
+				<th>Vorsilbe</th>
+				<th>Kurzzeichen</th>
+				<th>Zehnerpotenz<br>(10 hoch)
+				</th>
+				<th>Wert</th>
+				<th>Zahl</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>Yotta</td>
+				<td>Y</td>
+				<td>24</td>
+				<td>Quadrillion</td>
+				<td>1&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000</td>
+			</tr>
+			<tr>
+				<td>Zetta</td>
+				<td>Z</td>
+				<td>21</td>
+				<td>Trilliarde</td>
+				<td>1&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000</td>
+			</tr>
+			<tr>
+				<td>Exa</td>
+				<td>E</td>
+				<td>18</td>
+				<td>Trillion</td>
+				<td>1&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000</td>
+			</tr>
+			<tr>
+				<td>Peta</td>
+				<td>P</td>
+				<td>15</td>
+				<td>Billiarde</td>
+				<td>1&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000</td>
+			</tr>
+			<tr>
+				<td>Terra</td>
+				<td>T</td>
+				<td>12</td>
+				<td>Billion</td>
+				<td>1&#8239;000&#8239;000&#8239;000&#8239;000</td>
+			</tr>
+			<tr>
+				<td>Giga</td>
+				<td>G</td>
+				<td>9</td>
+				<td>Miliarde</td>
+				<td>1&#8239;000&#8239;000&#8239;000</td>
+			</tr>
+			<tr>
+				<td>Mega</td>
+				<td>M</td>
+				<td>6</td>
+				<td>Million</td>
+				<td>1&#8239;000&#8239;000</td>
+			</tr>
+			<tr>
+				<td>Kilo</td>
+				<td>k</td>
+				<td>3</td>
+				<td>Tausend</td>
+				<td>1&#8239;000</td>
+			</tr>
+			<tr>
+				<td>Hekto*</td>
+				<td>h</td>
+				<td>2</td>
+				<td>Hundert</td>
+				<td>100</td>
+			</tr>
+			<tr>
+				<td>Deka*</td>
+				<td>da</td>
+				<td>1</td>
+				<td>Zehn</td>
+				<td>10</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+				<td>0</td>
+				<td>Eins</td>
+				<td>1</td>
+			</tr>
+			<tr>
+				<td>Dezi*</td>
+				<td>d</td>
+				<td>-1</td>
+				<td>Zehntel</td>
+				<td>0,1</td>
+			</tr>
+			<tr>
+				<td>Zenti*</td>
+				<td>c</td>
+				<td>-2</td>
+				<td>Hundertstel</td>
+				<td>0,01</td>
+			</tr>
+			<tr>
+				<td>Milli</td>
+				<td>m</td>
+				<td>-3</td>
+				<td>Tausendstel</td>
+				<td>0,001</td>
+			</tr>
+			<tr>
+				<td>Mikro</td>
+				<td>μ</td>
+				<td>-6</td>
+				<td>Millionstel</td>
+				<td>0,000&#8239;001</td>
+			</tr>
+			<tr>
+				<td>Nano</td>
+				<td>n</td>
+				<td>-9</td>
+				<td>Milliardstel</td>
+				<td>0,000&#8239;000&#8239;001</td>
+			</tr>
+			<tr>
+				<td>Piko</td>
+				<td>p</td>
+				<td>-12</td>
+				<td>Billionstel</td>
+				<td>0,000&#8239;000&#8239;000&#8239;001</td>
+			</tr>
+			<tr>
+				<td>Femto</td>
+				<td>f</td>
+				<td>-15</td>
+				<td>Billiardstel</td>
+				<td>0,000&#8239;000&#8239;000&#8239;000&#8239;001</td>
+			</tr>
+			<tr>
+				<td>Atto</td>
+				<td>a</td>
+				<td>-18</td>
+				<td>Trillionstel</td>
+				<td>0,000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;001</td>
+			</tr>
+			<tr>
+				<td>Zepto</td>
+				<td>z</td>
+				<td>-21</td>
+				<td>Trilliardstel</td>
+				<td>0,000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;001</td>
+			</tr>
+			<tr>
+				<td>Yokto</td>
+				<td>y</td>
+				<td>-24</td>
+				<td>Quadrillionstel</td>
+				<td>0,000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;000&#8239;001</td>
+			</tr>
+		</tbody>
+
+		<tfoot>
+			<tr>
+				<td colspan=5>* Die zu Hekto(h), Deka(da), Dezi(d) und Zenti(c)
+					gehörigen Vielfache sind keine Potenzen von 1000</td>
+			</tr>
+		</tfoot>
+
+	</table>
+
+	<cite><a
+		href="https://de.wikipedia.org/wiki/Vors%C3%A4tze_f%C3%BCr_Ma%C3%9Feinheiten#SI-Pr%C3%A4fixe">Quelle</a></cite>
+
+	</main>
+
+</body>
+</html>
+
