@@ -1,0 +1,60 @@
+<!DOCTYPE >
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>UCC Table List</title>
+<link rel="stylesheet" href="/assets/css/jquery-ui.css" />
+<link rel="stylesheet" href="/assets/css/jquery-ui.structure.css" />
+<link rel="stylesheet" href="/assets/css/jquery-ui.theme.css" />
+<link rel="stylesheet" href="/assets/css/style.css" />
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery-ui.js"></script>
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+
+<!-- meine scripts globale funktionen vorher laden -->
+<script src="../assets/js/glob_functions.js"></script>
+
+</head>
+<body>
+	<div align="center">
+		<section>
+			<div id="Head">
+				<br>
+			</div>
+
+			<div id="Menue"></div>
+			<div id="TriggerReq"></div>
+		</section>
+
+	</div>
+
+	<div>
+		<table border="1" width="100%">
+			<colgroup>
+				<col style="background-color: lightgray" width="5%">
+				<col width="5%">
+				<col width="5%">
+				<col width="5%">
+				<col width="5%">
+				<col width="70%">
+				
+			</colgroup>
+			<thead bgcolor="grey" class="TriggerListHead">
+				
+			</thead>
+			<tbody id="list">
+			</tbody>
+
+		</table>
+	</div>
+
+	<div id="Foot" align="center">
+		<!-- "http://localhost/tablelist.html" -- tablelist-data.js
+			funktioniert</p>	-->
+	</div>
+<!-- Menue al erstes wegen abhängigkeit zu Globale REIHENFOLGE WICHTIG -->
+	<script src="../assets/js/menue.js"></script>
+	<script src="../assets/js/triggerlist-data.js"></script>
+	
+</body>
+</html>
