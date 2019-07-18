@@ -16,9 +16,9 @@ function dbconnect($env)
 {
     // include ('read_file.php');
     $database = "SAMPLE"; // Get these database details from
-    $hostname = "miner-System-Product-Name"; // the web console
-    $user = "db2inst1"; //
-    $password = "db2admin"; //
+    $hostname = "l"; // the web console
+    $user = "bb"; //
+    $password = "vv"; //
     $port = 50000; //
                    // $ssl_port = 50001;
                    // Build the connection string
