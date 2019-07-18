@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Test</title>
+<script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+<script type="text/javascript">
+	//check storage 
+	countcol = 1;
+	//window.localStorage.setItem('colNr', countcol);
+	if (typeof (window.localStorage) != 'undefined') {
+		//alert(" window.localStorage");
+		window.localStorage.setItem('reqName', reqName);
+
+	} else {
+		alert(" window.localStorage, not defined" + (reqName));
+		throw "window.localStorage, not defined";
+	}
+
+	var colNr = window.localStorage.getItem('colNr');
+	var reqName = window.localStorage.getItem('reqName');
+
+	alert("colNr - reqName  " + colNr + '  ' + reqName);
+	$(document).ready(function() {
+						$('#testcreate').click(function() {
+						countcol = countcol + 1;
+						$(this).before(
+
+							'<tr><td> '
+							+ '<label class="block" for="schulabschluss">Schulabschluss</label>
+							+ '<input style="margin:0.5em 0 0 0;" type="text" name="schulabschluss['+ countcol +']">'
+							+ '</td></tr>');
+
+							alert("colNr - in Func  "
+							+ countcol + '  ' + reqName);
+							window.localStorage.setItem('colNr', countcol);
+						});
+
+					});
+</script>
+
+</head>
+<body>
+	<h2>http://jsfiddle.net/3rwRH/</h2>
+	<section> <input type="hidden" name="hiddenfile"
+		id="hiddenfile" value="1" />
+	<div class="column">
+		<table>
+			<tr>
+				<td><label class="block" for="schulabschluss">Schulabschluss</label>
+					<input type="text" id="schulabschluss" name="schulabschluss[1]" />
+				</td>
+			</tr>
+		</table>
+		<a id="testcreate" class="mehr">add row</a>
+	</div>
+	</div>
+	</section>
+</body>
+</html>

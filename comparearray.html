@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Test</title>
+<link rel="stylesheet" href="/assets/css/jquery-ui.css" />
+<link rel="stylesheet" href="/assets/css/jquery-ui.structure.css" />
+<link rel="stylesheet" href="/assets/css/jquery-ui.theme.css" />
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery-ui.js"></script>
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+
+</head>
+<body>
+	<script>
+		var multi = [ [ 'TUCC001', 'Bea' ], [ 'TUCC003', 'gert' ],
+				[ 'TUCC005', 'adrian' ], [ 'TUCC007', 'roberto' ],
+				[ 'TUCC008', 'roli' ], [ 'TUCC010', 'Maumau' ] ];
+		var deve = [ 'TUCC001', 'TUCC002', 'TUCC003', 'TUCC004', 'TUCC005',
+				'TUCC006', 'TUCC007', 'TUCC008', 'TUCC009', 'TUCC010' ];
+		var test = [ 'TUCC001', 'TUCC002', 'TUCC004', 'TUCC005', 'TUCC007',
+				'TUCC008', 'TUCC010' ];
+		var qual = [ 'TUCC001', 'TUCC002', 'TUCC004', 'TUCC007', 'TUCC008' ];
+		var prod = [ 'TUCC001', , 'TUCC004', 'TUCC007', , 'TUCC077' ];
+		erg = '';
+		var t = 0;
+		var d = 0;
+		var q = 0;
+		var p = 0;
+
+		while (d < deve.length) {
+
+			var res = test.indexOf(deve[d]);
+
+			if (res >= 0) {
+				erg += ("<td> " + deve[d] + "</td>");
+				erg += ("<td>tYES</td>");
+
+			} else {
+				erg += ("<td> " + deve[d] + "</td>");
+				erg += ("<td>qNO</td>");
+
+			}
+			var res = qual.indexOf(deve[d]);
+
+			if (res >= 0) {
+				erg += ("<td>qYES</td>");
+
+			} else {
+				erg += ("<td>qNO</td>");
+
+			}
+			var res = prod.indexOf(deve[d]);
+
+			if (res >= 0) {
+				erg += ("<td>pYES</td>");
+
+			} else {
+				erg += ("<td>pNO</td>");
+
+			}
+//each
+			var res = multi.indexOf(deve[d]);
+			//alert(d  + "-" + (multi[d][0]));
+			if (res >= 0) {
+			//	erg += ("<td>" + (multi[d][1]) + "</td>");
+
+			} else {
+			//	erg += ("<td>" + (multi[d][1]) + "</td>");
+
+			}
+			d++;
+			//alert(d  + "-" + (multi[d][1]));
+		}
+
+		console.log("for me" + erg);
+	</script>
+
+
+	<div>
+		<h2>-- "underscorejs.org" --</h2>
+		console.log("Hello world!");
+		<table>
+
+			<tr>
+				<td id="deve2"></td>
+			</tr>
+		</table>
+
+
+	</div>
+</body>
+</html>
