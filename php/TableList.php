@@ -46,7 +46,7 @@ if ($function === 'getEnvList') {
     // echo 'if $function = ', $function . '\n' ;
 
     $sql = " SELECT  NAME, CREATOR, TBSPACE, REMARKS,
-                    CTIME, STATS_TIME, STATISTICS_PROFILE,LASTUSED,    ALTER_TIME, COLCOUNT ,'" . $env . "'
+                    CTIME, STATS_TIME, STATISTICS_PROFILE,LASTUSED,    ALTER_TIME, COLCOUNT ,'" . $env . "', TAB.TOWNER ,TREL_TYPE
             from
                  ( SELECT TB.NAME, TB.CREATOR, TB.TBSPACE, TB.REMARKS,
                           TB.CTIME, TB.STATS_TIME, TB.STATISTICS_PROFILE, TB.LASTUSED,
@@ -56,11 +56,33 @@ if ($function === 'getEnvList') {
                     SYSIBM.SYSTABLESPACES AS TS
                     ON TB.TBSPACE = TS.TBSPACE
                     WHERE TB.CREATOR = '" . $database . "') as sys
-                    order by Name         ";
-    // echo ("db connect - " . $db . " sql - " . $sql) ;
+            left outer join
+             (SELECT  TOWNER , tbname , TREL_TYPE
+                FROM DB2INST1.TDOCTAB
+                where  substr(TTIMESTAMP , 1, 10) = (select max(substr(TTIMESTAMP , 1, 10))      
+                                    from  TDOCTAB , SYSIBM.SYSTABLES  WHERE  TBNAME = name   )     
+               )  as tab
+             on tab.tbname = sys.name 
+      order by Name         ";
+    // echo ("db connect - " . $db . " sql - " . $sql);
     echo getEnvList($db, $sql);
 }
 
+/*
+ * left outer join
+ * ( SELECT tbname, TDESCRIPTION, TTYPE, TREC_ESTIM,
+ * TREC_GROWTH, TDOMAIN, TREL_TYPE, TREL_RULES, THOUSEKEEPING,
+ * THOUSE_RULES, TCID, TCID_RULES, TUSE_UCC, TUSE_DWH, TUSE_ODS, TUSE_CWF, TUSE_IWF,
+ * TUSE_OWF, TUSE_DEP_MANAGER, TENTITY_DESCRIPTION , TOWNER , TTIMESTAMP
+ * FROM DB2INST1.TDOCTAB
+ * WHERE TBNAME = '" . $table . "'
+ * and substr(TTIMESTAMP , 1, 10) = (select max(substr(TTIMESTAMP , 1, 10))
+ * from TDOCTAB WHERE TBNAME = '" . $table . "' )
+ * -- order by TTIMESTAMP asc
+ * ) as tab
+ * on tab.tbname = sys.name
+ * fetch first row only
+ */
 function getEnvList($db, $sql)
 {
     // echo ("echo db connect - " . $db . "sql - " . $sql) ;
@@ -69,7 +91,7 @@ function getEnvList($db, $sql)
 
     $json_response = array();
 
-    while ($row = db2_fetch_array($stmt)) {
+    while ($row_array = db2_fetch_array($stmt)) {
         $row_array['NAME'] = utf8_encode(db2_result($stmt, 0));
         $row_array['CREATOR'] = utf8_encode(db2_result($stmt, 1));
         $row_array['TBSPACE'] = utf8_encode(db2_result($stmt, 2));
@@ -81,6 +103,8 @@ function getEnvList($db, $sql)
         $row_array['ALTER_TIME'] = utf8_encode(db2_result($stmt, 8));
         $row_array['COLCOUNT'] = utf8_encode(db2_result($stmt, 9));
         $row_array['ENVIRONMENT'] = utf8_encode(db2_result($stmt, 10));
+        $row_array['OWNER'] = utf8_encode(db2_result($stmt, 11));
+        $row_array['TREL_TYPE'] = utf8_encode(db2_result($stmt, 12));
 
         // var_dump($row_array);
         array_push($json_response, $row_array);
