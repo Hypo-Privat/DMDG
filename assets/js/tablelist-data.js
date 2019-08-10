@@ -68,7 +68,7 @@ $('.TableListHead').html('<tr><td>'+ Sprache.table + '</td>'
 		+'<td>QDB2</td>'
 		+'<td>PDB2</td>'
 		+'<td>'+ Sprache.owner + '</td>'
-		+'<td>'+ Sprache.dwh + '</td>'
+		+'<td>'+ Sprache.reloadtyp + '</td>'
 		+'<td>'+ Sprache.buinfo + '</td></tr>'
 		);
 
@@ -116,7 +116,7 @@ function ArrayResult() {
 		
 		document.querySelector("#list").innerHTML += '<tr><td>' 
 			+ '<button onclick="calltest(' + "'" + database + "','" + vald.ENVIRONMENT + "','" + vald.NAME + "'" + ')">' + vald.NAME + '</button>' + '</td><td>' 
-			+ vald.LASTUSED + '</td><td>' + vald.REMARKS + '</td>' + dergy + terg + qerg + perg + '<td>' + 'Gert Dorn' + '</td><td>' + 'yes' + '</td><td>' 
+			+ vald.LASTUSED + '</td><td>' + vald.REMARKS + '</td>' + dergy + terg + qerg + perg + '<td>' + vald.OWNER + '</td><td>' + vald.TREL_TYPE + '</td><td>' 
 			+ vald.REMARKS + '</td></tr>';
 
 	}); //ende deve
