@@ -1,0 +1,43 @@
+Table New = extractData
+Array
+(
+    [HTTP_HOST] => localhost
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_ACCEPT] => application/json, text/javascript, */*; q=0.01
+    [HTTP_DNT] => 1
+    [HTTP_X_REQUESTED_WITH] => XMLHttpRequest
+    [HTTP_USER_AGENT] => Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36
+    [CONTENT_TYPE] => application/json
+    [HTTP_REFERER] => http://localhost/tablenew.html?
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, br
+    [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.9,de;q=0.8
+    [HTTP_COOKIE] => _ga=GA1.1.891714540.1529259148; PHPSESSID=v11tmrd64gj9ahokjej128qi63; _pk_id.1.1fff=c8f3b8c6735b2d3d.1540349662.1.1540349662.1540349662.; cookieconsent_dismissed=yes
+    [PATH] => /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    [SERVER_SIGNATURE] => <address>Apache/2.4.29 (Ubuntu) Server at localhost Port 80</address>
+
+    [SERVER_SOFTWARE] => Apache/2.4.29 (Ubuntu)
+    [SERVER_NAME] => localhost
+    [SERVER_ADDR] => ::1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => ::1
+    [DOCUMENT_ROOT] => /var/www/html
+    [REQUEST_SCHEME] => http
+    [CONTEXT_PREFIX] => 
+    [CONTEXT_DOCUMENT_ROOT] => /var/www/html
+    [SERVER_ADMIN] => webmaster@localhost
+    [SCRIPT_FILENAME] => /var/www/html/php/TableNew.php
+    [REMOTE_PORT] => 59246
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [REQUEST_METHOD] => GET
+    [QUERY_STRING] => function=extractData&NAME=Tdmdg100&TOWNER=gert&DBA=dbq&TDOMAIN=dmdg&DATABASE=&TBSPACE=&THOUSEKEEPING=y&THOUSE_RULES=&TREL_TYPE=&TREL_RULES=&TCID=y&TCID_RULES=&TUSE_dmdg=n&TUSE_ODS=o&TUSE_DEP_MANAGER=o&TUSE_CWF=%3Coption%20selected%20value=&TUSE_IWF=o&TUSE_OWF=%3Coption%20selected%20value=&TDESCRIPTION=&TENTITY_DESCRIPTION=TENTITY_DESCRIPTION&VER_TBNAME=null&VER_CHANGE_DATE=&VER_CHANGE_NR=&VER_NR=%20&VER_DESCRIPTION=&VER_RESPONSIBLE=undefined
+    [REQUEST_URI] => /php/TableNew.php?function=extractData&NAME=Tdmdg100&TOWNER=gert&DBA=dbq&TDOMAIN=dmdg&DATABASE=&TBSPACE=&THOUSEKEEPING=y&THOUSE_RULES=&TREL_TYPE=&TREL_RULES=&TCID=y&TCID_RULES=&TUSE_dmdg=n&TUSE_ODS=o&TUSE_DEP_MANAGER=o&TUSE_CWF=%3Coption%20selected%20value=&TUSE_IWF=o&TUSE_OWF=%3Coption%20selected%20value=&TDESCRIPTION=&TENTITY_DESCRIPTION=TENTITY_DESCRIPTION&VER_TBNAME=null&VER_CHANGE_DATE=&VER_CHANGE_NR=&VER_NR=%20&VER_DESCRIPTION=&VER_RESPONSIBLE=undefined
+    [SCRIPT_NAME] => /php/TableNew.php
+    [PHP_SELF] => /php/TableNew.php
+    [REQUEST_TIME_FLOAT] => 1555917558.462
+    [REQUEST_TIME] => 1555917558
+) ;
+
+php/TableNew.php?function=saveTable&NAME=Tess111&TOWNER=Astrid Bär&DBA=Gert Dorn&TDOMAIN=ANC&DATABASE=ESS&TBSPACE=Sess111&THOUSEKEEPING=y&THOUSE_RULES=Standard&TREL_TYPE=Reload Type Full&TREL_RULES=Rules&TCID=y&TCID_RULES=See token&TUSE_dmdg=n&TUSE_ODS=o&TUSE_DEP_MANAGER=o&TUSE_CWF=y&TUSE_IWF=o&TUSE_OWF=y&TDESCRIPTION=Parameter for Gert&TENTITY_DESCRIPTION=TENTITY_DESCRIPTION "+i+" "+i+"Business Information &VER_TBNAME=null&VER_CHANGE_DATE=2019-06-28&VER_CHANGE_NR=PMS2000&VER_NR=Ver001&VER_DESCRIPTION=Test Version&VER_RESPONSIBLE=Klausundefined&COL_NAME0=Col 1&COL_TYPE0=char&COL_LENGTH0=12&COL_LENGTH0=12&COL_KEY0=pk&COL_NULLS0=y&COL_INDEX0=y&COL_DEFAULT0=Space&COL_CID0=n&COL_INFO0=COL_INFO 1&COL_DESCRIPTION0=test Col 1&COL_NO0=0&COL_NAME1=col 2&COL_TYPE1=Timestamp&COL_LENGTH1=&COL_LENGTH1=&COL_KEY1=fk&COL_NULLS1=y&COL_INDEX1=y&COL_DEFAULT1=Current Timestamp&COL_CID1=n&COL_INFO1=COL_INFO 2&COL_DESCRIPTION1=test Col 2&COL_NO1=1
+
+
